@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guess the Number - 5 Chances</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f8ff;
+      padding-top: 50px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    #attempts {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Guess the Number (1 to 100)</h1>
+  <p>You have only 5 chances!</p>
+
+  <input type="number" id="guessInput" min="1" max="100" />
+  <button onclick="checkGuess()">Submit</button>
+
+  <div id="result"></div>
+  <div id="attempts"></div>
+
+  <script>
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    function resetGame() {
+      secretNumber = Math.floor(Math.random() * 100) + 1;
+      attempts = 0;
+      document.getElementById('result').textContent = '';
+      document.getElementById('attempts').textContent = '';
+      document.getElementById('guessInput').value = '';
+    }
+
+    function checkGuess() {
+      const userGuess = parseInt(document.getElementById('guessInput').value);
+      const result = document.getElementById('result');
+      const attemptsDisplay = document.getElementById('attempts');
+
+      if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+        result.textContent = '⚠️ Please enter a number between 1 and 100.';
+        result.style.color = 'orange';
+        return;
+      }
+
+      attempts++;
+
+      if (userGuess === secretNumber) {
+        result.textContent = `🎉 Correct! You guessed it in ${attempts} attempt(s). Game will restart.`;
+        result.style.color = 'green';
+        setTimeout(resetGame, 3000);
+        return;
+      } else if (userGuess < secretNumber) {
+        result.textContent = '📉 Too low!';
+        result.style.color = 'blue';
+      } else {
+        result.textContent = '📈 Too high!';
+        result.style.color = 'red';
+      }
+
+      attemptsDisplay.textContent = `Attempts: ${attempts} / ${maxAttempts}`;
+
+      if (attempts >= maxAttempts) {
+        result.textContent = `❌ Out of attempts! The number was ${secretNumber}. Restarting game...`;
+        result.style.color = 'darkred';
+        setTimeout(resetGame, 3000);
+      }
+    }
+  </script>
+
+</body>
+</html>
